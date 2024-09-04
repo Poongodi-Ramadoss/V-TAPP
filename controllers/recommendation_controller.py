@@ -10,7 +10,7 @@ recommendation_bp = Blueprint('recommendations', __name__)
 def recommend(user_id):
     # data = request.json
     # user_id = data.get('user_id')
-    
+    print("Request for user",user_id)
     if not user_id:
         return jsonify({"error": "User ID is required"}), 400
 
@@ -20,11 +20,16 @@ def recommend(user_id):
         
         # Load data from the database
         # wishlist_df = pd.read_sql_query('SELECT * FROM wishlist', conn)
-        wishlist_df = conn.table('wishlists').select('*').execute()
-        ratings_df =conn.table('books_ratings').select('*').execute()
-        books_df = conn.table('books').select('*').execute()
+        wishlist = conn.table('wishlists').select('*').execute()
+        ratings =conn.table('books_ratings').select('*').execute()
+        books = conn.table('books').select('*').execute()
         
-        print('Loading recommandation for user {user_id}')
+        print('Loading recommandation for user', user_id)
+
+        wishlist_df = pd.DataFrame(wishlist.data)
+        ratings_df = pd.DataFrame(ratings.data)
+        books_df=pd.DataFrame(books.data)
+
         # Get recommendations
         recommended_books = recommend_books_based_on_wishlist(user_id, wishlist_df, ratings_df, books_df)
         print(recommended_books)
