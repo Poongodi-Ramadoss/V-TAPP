@@ -12,4 +12,4 @@ CORS(app)
 app.register_blueprint(recommendation_bp)
 
 if __name__ == '__main__':
-    app.run(host=os.getenv('FLASK_RUN_HOST', '0.0.0.0'), port=int(os.getenv('FLASK_RUN_PORT', 3000)), debug=True)
+    app.run(host=os.getenv('FLASK_RUN_HOST', '0.0.0.0'), port=int(os.getenv('FLASK_RUN_PORT', 6000)), debug=True)
