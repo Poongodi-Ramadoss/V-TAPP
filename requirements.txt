@@ -1,0 +1,10 @@
+Flask
+Flask-Cors
+scikit-learn==1.2.0
+numpy==1.24.3
+pandas==2.0.3
+psycopg2==2.9.3
+supabase
+matplotlib
+scikit-surprise
+python-dotenv
