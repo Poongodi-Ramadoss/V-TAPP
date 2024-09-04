@@ -11,7 +11,7 @@ RUN  pip install --upgrade pip
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-ENV FLASK_RUN_PORT 6000
+ENV FLASK_RUN_PORT 3500
 
 COPY . .
 
