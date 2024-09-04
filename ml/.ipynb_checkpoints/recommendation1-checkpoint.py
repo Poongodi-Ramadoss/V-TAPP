@@ -260,7 +260,7 @@ def get_book_recommendations(user_id, model, books_df, num_recommendations=5):
     recommended_books = recommended_books.copy()
     recommended_books['predicted_rating'] = recommended_ratings
     
-    return recommended_books[['book_id', 'isbn','image','title', 'authors', 'predicted_rating']]
+    return recommended_books[['book_id', 'title', 'authors', 'predicted_rating']]
 
 #user_id = 120
 # recommended_books = get_book_recommendations(user_id, best_model, books_df)
