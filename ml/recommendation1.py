@@ -262,9 +262,9 @@ def get_book_recommendations(user_id, model, books_df, num_recommendations=5):
     
     return recommended_books[['book_id', 'title', 'authors', 'predicted_rating']]
 
-user_id = 120
-recommended_books = get_book_recommendations(user_id, best_model, books_df)
-print(recommended_books)
+#user_id = 120
+# recommended_books = get_book_recommendations(user_id, best_model, books_df)
+# print(recommended_books)
 
 # %%
 #recommendation for wishlist
@@ -287,16 +287,16 @@ def recommend_books_based_on_wishlist(user_id, wishlist_df, ratings_df, books_df
     similar_users = wishlist_df[wishlist_df['book_id'].isin(user_wishlist_books)]['user_id'].unique()
     
     if len(similar_users) == 0:
-        print(f"No similar users found for user {user_id}.")
-        return pd.DataFrame(columns=['book_id', 'title', 'authors'])
+        print(f"No similar users found for user {user_id}. Falling back to popular books.")
+        return get_book_recommendations(user_id, model, books_df, num_recommendations)
 
     # Aggregate the books from these similar users' wishlists, excluding the books already in the target user's wishlist
     similar_users_books = wishlist_df[(wishlist_df['user_id'].isin(similar_users)) & (~wishlist_df['book_id'].isin(user_wishlist_books))]
 
     # If no books found in similar users' wishlists, return an empty DataFrame
     if similar_users_books.empty:
-        print(f"No additional books found in similar users' wishlists for user {user_id}.")
-        return pd.DataFrame(columns=['book_id', 'title', 'authors'])
+        print(f"No additional books found in similar users' wishlists for user {user_id}.Falling back to popular books.")
+        return get_book_recommendations(user_id, model, books_df, num_recommendations)
     
     # Count how often each book appears in the similar users' wishlists
     book_recommendations = similar_users_books['book_id'].value_counts().head(num_recommendations)
@@ -308,8 +308,8 @@ def recommend_books_based_on_wishlist(user_id, wishlist_df, ratings_df, books_df
 
 # Example usage
 # user_id = 58  # Replace with the actual user_id
-recommended_books = recommend_books_based_on_wishlist(user_id, wishlist_df, ratings_df, books_df)
-print(recommended_books)
+# recommended_books = recommend_books_based_on_wishlist(user_id, wishlist_df, ratings_df, books_df)
+# print(recommended_books)
 
 
 # %%
