@@ -16,3 +16,5 @@ ENV FLASK_RUN_PORT 3500
 COPY . .
 
 CMD ["python", "app.py"]
+
+
