@@ -45,27 +45,27 @@ stages:
               ArtifactName: "manifests"
               publishLocation: "Container"
 
-  # - stage: Deploy
-  #   displayName: Build image
-  #   jobs:
-  #     - job: Build
-  #       pool:
-  #         vmImage: ubuntu-latest
-  #       steps:
-  #         - task: DownloadPipelineArtifact@2
-  #           displayName: Download Artifacts
-  #           inputs:
-  #             buildType: "current"
-  #             artifactName: "manifests"
-  #             itemPattern: "**/*.yaml"
-  #             targetPath: "$(System.ArtifactDirectory)"
+  - stage: Deploy
+    displayName: Build image
+    jobs:
+      - job: Build
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: Download Artifacts
+            inputs:
+              buildType: "current"
+              artifactName: "manifests"
+              itemPattern: "**/*.yaml"
+              targetPath: "$(System.ArtifactDirectory)"
 
-  #         - task: KubernetesManifest@1
-  #           displayName: Deploy
-  #           inputs:
-  #             action: "deploy"
-  #             connectionType: "kubernetesServiceConnection"
-  #             kubernetesServiceConnection: "kubernetes-aws-connection"
-  #             namespace: "default"
-  #             manifests: "$(System.ArtifactDirectory)/configuration/deployment.yaml"
-  #             containers: "pedroavpereiradev/book-swap-recommendations:$(tag)"
+          - task: KubernetesManifest@1
+            displayName: Deploy
+            inputs:
+              action: 'deploy'
+              connectionType: 'kubernetesServiceConnection'
+              kubernetesServiceConnection: 'kubectl-aws-connection'
+              namespace: 'default'
+              manifests: '$(System.ArtifactDirectory)/configuration/deployment.yaml'
+              containers: 'pedroavpereiradev/book-swap-recommendations:$(tag)'
