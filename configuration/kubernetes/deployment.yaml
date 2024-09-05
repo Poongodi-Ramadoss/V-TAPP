@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: bookswap
+    microservice: recommendation
+  name: recommendation
+  namespace: default
+spec:
+  replicas: 1
+  minReadySeconds: 30
+  selector:
+    matchLabels:
+      app: bookswap
+      microservice: recommendation
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: bookswap
+        microservice: recommendation
+    spec:
+      containers:
+        - image: pedroavpereiradev/book-swap-recommendations:latest
+          imagePullPolicy: IfNotPresent
+          name: recommendation
+          env:
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_USER
+                  name: db-configmap
+            - name: DB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_PASSWORD
+                  name: db-configmap
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_HOST
+                  name: db-configmap
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_NAME
+                  name: db-configmap
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_PORT
+                  name: db-configmap
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 512Mi
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 45
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: bookswap
+    microservice: recommendation
+  name: recommendation-lb
+  namespace: default
+spec:
+  ports:
+    - nodePort: 30634
+      protocol: TCP
+      port: 3500
+      targetPort: 3500
+  selector:
+    app: bookswap
+    microservice: recommendation
+  sessionAffinity: None
+  type: LoadBalancer
